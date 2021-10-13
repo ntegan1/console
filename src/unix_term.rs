@@ -133,7 +133,7 @@ fn read_bytes(fd: i32, buf: &mut [u8], count: u8) -> io::Result<u8> {
     }
 }
 pub fn read_single_key() -> io::Result<Key> {
-    read_single_key_timeout(0)
+    read_single_key_timeout(-1)
 }
 
 pub fn read_single_key_timeout(timeout_ms: i32) -> io::Result<Key> {
