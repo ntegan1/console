@@ -132,8 +132,11 @@ fn read_bytes(fd: i32, buf: &mut [u8], count: u8) -> io::Result<u8> {
         Ok(read as u8)
     }
 }
-
 pub fn read_single_key() -> io::Result<Key> {
+    read_single_key_timeout(0)
+}
+
+pub fn read_single_key_timeout(timeout_ms: i32) -> io::Result<Key> {
     let tty_f;
     let fd = unsafe {
         if libc::isatty(libc::STDIN_FILENO) == 1 {
@@ -239,7 +242,7 @@ pub fn read_single_key() -> io::Result<Key> {
             };
 
             // negative timeout means that it will block indefinitely
-            let ret = unsafe { libc::poll(&mut pollfd as *mut _, 1, -1) };
+            let ret = unsafe { libc::poll(&mut pollfd as *mut _, 1, timeout_ms) };
             if ret < 0 {
                 return Err(io::Error::last_os_error());
             }

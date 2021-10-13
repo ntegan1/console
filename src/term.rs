@@ -276,6 +276,13 @@ impl Term {
             read_single_key()
         }
     }
+    pub fn read_key_timeout(&self, timeout_ms: i32) -> io::Result<Key> {
+        if !self.is_tty {
+            Ok(Key::Unknown)
+        } else {
+            read_single_key_timeout(timeout_ms)
+        }
+    }
 
     /// Read one line of input.
     ///
